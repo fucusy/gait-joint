@@ -1,0 +1,22 @@
+# ingore data
+data
+
+# IDE
+.idea
+
+
+# python auto file
+*.pyc
+
+# ignore cache
+cache
+
+# ignore log
+nohup.out
+*/__pycache__/
+
+# ignore config.py
+config.py
+
+#system files
+.DS_Store
