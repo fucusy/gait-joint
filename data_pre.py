@@ -10,6 +10,7 @@ import skimage.color as color
 import config
 from tools import tool, np_helper
 import re
+import logging
 
 
 def load_test_video():
@@ -184,5 +185,37 @@ def test():
     recover_video_with_joint(img_folder)
 
 
+def main():
+    logging.info("start data_pre")
+    for i in range(1, 125):
+        folder = "%s/%03d/" % (config.data.dataset_b_video, i)
+        logging.info("scan %s" % folder)
+        avis = [x for x in os.listdir(folder) if x.endswith(".avi")]
+        for avi in avis:
+            hid, cond, seq, view = tool.extract_info_from_path(avi)
+            video_path = "%s/%s" % (folder, avi)
+            back_path = "%s/%s-bkgrd-%s.avi" % (folder, hid, view)
+            logging.info("process %s" % video_path)
+
+            if os.path.exists(video_path) and os.path.exists(back_path):
+                try:
+                    img_folder = do_box(video_path, back_path)
+                except:
+                    logging.error("error when do box")
+                try:
+                    do_joint(img_folder)
+                except:
+                    logging.error("no torch found")
+
+                try:
+                    recover_video_with_joint(img_folder)
+                except:
+                    logging.error("error when recover")
+                logging.info("end process %s" % video_path)
+            else:
+                if not os.path.exists(video_path):
+                    logging.error("%s do not exists" % video_path)
+                if not os.path.exists(back_path):
+                    logging.error("%s do not exists" % back_path)
 if __name__ == '__main__':
     test()
