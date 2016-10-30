@@ -168,7 +168,7 @@ def recover_video_with_joint(joint_folder):
 
     joint_video = "%s/plot_joint.avi" % joint_folder
     img_tpl = "%s/%%04d_plot_joint.jpg" % joint_folder
-    subprocess.call(["ffmpeg", "-i", img_tpl, "-c:v", "libx264", joint_video])
+    subprocess.call(["ffmpeg", "-i", img_tpl, "-c:v", "libx264", joint_video, "-y"])
 
     return joint_video
 
@@ -177,7 +177,10 @@ def test():
     video_path = config.data.test_video_path
     back_path = config.data.test_back_path
     img_folder = do_box(video_path, back_path)
-    do_joint(img_folder)
+    try:
+        do_joint(img_folder)
+    except:
+        print("no torch found")
     recover_video_with_joint(img_folder)
 
 

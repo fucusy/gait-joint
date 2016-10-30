@@ -171,6 +171,15 @@ def plot_joint(img, joints):
         [[1, 2], [2, 3], [3, 7], [4, 5], [4, 7], [5, 6], [7, 9], [9, 10], [14, 9], [11, 12], [12, 13], [13, 9],
          [14, 15], [15, 16]]) - 1
 
+    colors = [
+        (255	,192	,203) #pink
+        ,(216	,191	,216) #thistle
+        ,(202	,225	,255) #lightsteelblue 1
+        ,(152	,245	,255) #cadetblue 2
+        ,(84	,255	,159) #sea green 1
+        ,(255	,246	,143) #khaki 1
+        ,(205	,201	,201) #snow 3
+    ]
 
 
     img = Image.fromarray(img.astype(np.uint8))
@@ -182,7 +191,7 @@ def plot_joint(img, joints):
             # plot only the visible joints
             a_x, a_y = joints[pairs[i, 0]]
             b_x, b_y = joints[pairs[i, 1]]
-            draw.line((a_x, a_y, b_x, b_y), width=3, fill=(255, 0, 0))
+            draw.line((a_x, a_y, b_x, b_y), width=3, fill=colors[i%len(colors)])
     return np.asarray(img)
 
 def plot_box(img, box):
