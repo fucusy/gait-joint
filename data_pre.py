@@ -180,7 +180,7 @@ def test():
     img_folder = do_box(video_path, back_path)
     try:
         do_joint(img_folder)
-    except:
+    except Exception:
         print("no torch found")
     recover_video_with_joint(img_folder)
 
