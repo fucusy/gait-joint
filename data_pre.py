@@ -109,9 +109,11 @@ def do_joint(crop_folder):
     :param crop_folder:  the folder contain cropped image
     :return:
     """
-    subprocess.call(["cd", config.project.human_pose_path])
-    subprocess.call(["th", "test.lua", "-useGPU", "1", "-img_folder", crop_folder])
-
+    os.chdir(config.project.human_pose_path)
+    lua_script = "test.lua"
+    th = ["th", lua_script, "-useGPU", "1", "-img_folder", crop_folder]
+    logging.info(" ".join(th))
+    subprocess.call(th)
 
 def update_joint(joint_folder):
     """
@@ -178,10 +180,7 @@ def test():
     video_path = config.data.test_video_path
     back_path = config.data.test_back_path
     img_folder = do_box(video_path, back_path)
-    try:
-        do_joint(img_folder)
-    except Exception:
-        print("no torch found")
+    do_joint(img_folder)
     recover_video_with_joint(img_folder)
 
 
@@ -218,4 +217,7 @@ def main():
                 if not os.path.exists(back_path):
                     logging.error("%s do not exists" % back_path)
 if __name__ == '__main__':
+    level = logging.DEBUG
+    FORMAT = '%(asctime)-12s[%(levelname)s] %(message)s'
+    logging.basicConfig(level=level, format=FORMAT, datefmt='%Y-%m-%d %H:%M:%S')
     test()
